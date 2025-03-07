@@ -1,0 +1,32 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/LoanServlet") 
+public class LoanServlet extends HttpServlet { 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException { 
+              
+        double loanAmount = Double.parseDouble(request.getParameter("amount"));
+        double annualInterestRate = double.parseDouble(request.getParameter("rate")); 
+        int years = Integer.parseInt(request.getParameter("years"));
+        
+        Loan loan = new Loan(annualInterestRate, years, loanAmount);
+        
+        double monthlyPayment = loan.getMonthlyPayment();
+        double totalPayment = loan.getTotalPayment();
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        out.println("<html><head><title>Loan Result</title></head><body>");
+        out.println("<h2>Loan Calculation Result</h2>");
+        out.printf("<p>Monthly Payment: %.2f</p>", monthlyPayment);
+        out.printf("<p>Total Payment: %.2f</p>", totalPayment);
+        out.println("</body></html>");
+    } 
+} 
